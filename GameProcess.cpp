@@ -62,7 +62,7 @@ void GameAction(HWND hWnd)
 			if(PlayScene_1(hWnd))		//执行场景1游戏逻辑，通过返回值判断是否执行完毕
 			{
 				g_bInitScene=FALSE;	//设置场景初始化标志
-				//				InitScene_2(hWnd);	//初始化场景2;
+				// InitScene_2(hWnd);	//初始化场景2;
 			}
 			break;
 		case 2:
@@ -174,7 +174,7 @@ BOOL PlayScene_2(HWND hWnd)
 BOOL InitScene_3(HWND hWnd)
 {
 	//载入背景
-	g_pSprTestBK=new Sprite(NULL,"resource\\Test2BK.bmp");
+	g_pSprTestBK=new Sprite(NULL,"resource\\TestBK.bmp");
 	mapbk=new Sprite(NULL,"resource\\mario.bmp");      //载入地图
 
 	g_pSprBox=new Sprite(NULL,"resource\\TownBox.bmp");
