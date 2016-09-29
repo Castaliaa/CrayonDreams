@@ -346,25 +346,25 @@ void KeyEvent(HWND hWnd)
 			Y--;
 			velo+=1;
 		}
-		else if(GetAsyncKeyState(VK_UP)<0&&GetAsyncKeyState(VK_LEFT)==0&&GetAsyncKeyState(VK_RIGHT)==0)		//只有上方向键按下
+		else if(GetAsyncKeyState(VK_SPACE)<0&&GetAsyncKeyState(VK_LEFT)==0&&GetAsyncKeyState(VK_RIGHT)==0)		//只有上方向键按下
 		{
 			velo=-14;
 			X=14;
 			Direction=0;
 		}
-		else if(GetAsyncKeyState(VK_UP)<0&&GetAsyncKeyState(VK_LEFT)<0)		//判断左上方向键是否按下
+		else if(GetAsyncKeyState(VK_SPACE)<0&&GetAsyncKeyState(VK_LEFT)<0)		//判断左上方向键是否按下
 		{
 			velo=-14;
 			X=14;
 			Direction=-5;
 		}
-		else if(GetAsyncKeyState(VK_UP)<0&&GetAsyncKeyState(VK_RIGHT)<0)		//判断右上方向键是否按下
+		else if(GetAsyncKeyState(VK_SPACE)<0&&GetAsyncKeyState(VK_RIGHT)<0)		//判断右上方向键是否按下
 		{
 			velo=-14;
 			X=14;	
 			Direction=5;
 		}
-		else if(GetAsyncKeyState(VK_SPACE)<0)
+		else if(GetAsyncKeyState(VK_UP)<0)
 		{	
 			g_pPhyTest->MoveDirect(DI_UP);	//游戏者物理运动对象向上移动
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
