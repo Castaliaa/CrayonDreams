@@ -68,12 +68,12 @@ int GameMap::LoadMap(int stage)
 	
 }
 //显示地图
-void GameMap::ShowMap(HDC hDc,Sprite *mapbk)//
+void GameMap::ShowMap(HDC hDc,Sprite *mapbk)	// 这个方法是直接画图，不便于管理，用AddMap2SpriteManager取代之
 {  
 	int i;
 	int xstart,ystart;
 	int j,k;
-	
+
 	for(i=0;i<MapbkObjNum;i++)
 	{
 		ystart=MapArray[i].y*50;
@@ -90,9 +90,32 @@ void GameMap::ShowMap(HDC hDc,Sprite *mapbk)//
 			}
 			ystart+=nRectHeight[MapArray[i].id];				
 		} // end of for
-		
-		
 	}
-	
 }
 
+void GameMap::AddMap2SpriteManager(SpriteManage &Sprm) // 将地图物品添加到精灵管理类，取代ShowMap函数
+{
+	int i, j, k;
+	int xstart, ystart;
+
+	for(i=0;i<MapbkObjNum;i++)
+	{
+		ystart=MapArray[i].y*50;
+		
+		for(j=0;j<MapArray[i].h;j++)
+		{
+			xstart=MapArray[i].x*50;
+			for(k=0;k<MapArray[i].w;k++)
+			{
+				// TODO: 
+				Sprite *pSprMap = new Sprite(NULL,"resource\\mario.bmp");
+				Sprm.AddSprite(pSprMap, 2);			// 地图加到背景层的上一层
+				pSprMap -> SetDrawRectInfo(xstart, ystart, nRectX[MapArray[i].id], nRectY[MapArray[i].id],
+						nRectWidth[MapArray[i].id],nRectHeight[MapArray[i].id], TRUE, (255,255,255));		// 设置绘图信息
+
+				xstart+=nRectWidth[MapArray[i].id];
+			}
+			ystart+=nRectHeight[MapArray[i].id];				
+		}
+	}
+}

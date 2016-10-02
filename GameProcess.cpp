@@ -43,9 +43,11 @@ void GameStart(HWND hWnd)
 	//g_pLoadScene=new Sprite(NULL,"resource\\LoadScene.bmp");
 	
 	g_nScene=1;			//设置场景标志
+	// g_nScene=2;			//设置场景标志
 	g_bInitScene=FALSE;	//设置场景初始化标志
 	
 	InitScene_1(hWnd);	//初始化场景1
+	// InitScene_2(hWnd);	//初始化场景1
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -193,7 +195,9 @@ BOOL InitScene_3(HWND hWnd)
 	g_Sprm.AddSprite(g_pSprBox,3);
 	// g_Sprm.AddSprite(g_pSprBox2,3);                                                 //加了一个箱子
     //g_Sprm.AddSprite(mapbk,3);                //输出的地图
-	 
+	
+	if(map.LoadMap(stage))
+		map.AddMap2SpriteManager(g_Sprm);
     
 	/*	g_ptTestAnima1.x=505;
 	g_ptTestAnima1.y=137;*/
@@ -241,6 +245,7 @@ BOOL PlayScene_3(HWND hWnd)
 	g_pSprTestBK->SetDrawInfo(0,0,TRUE,(255,255,255));
 	g_pSprBox->SetDrawInfo(g_pPhyBox->GetLeftTop().x,g_pPhyBox->GetLeftTop().y,TRUE);
 	// g_pSprBox2->SetDrawInfo(g_pPhyBox2->GetLeftTop().x,g_pPhyBox2->GetLeftTop().y,TRUE);      //加了一个箱子
+	// mapbk -> set
 	
 	return TRUE;
 }
@@ -251,14 +256,22 @@ BOOL PlayScene_3(HWND hWnd)
 void GamePaint(HDC hDC)
 {
 	if(g_bInitScene)	//判断场景初始化是否完成
-		//g_pLoadScene->Draw(hDC,0,0);	//绘制加载场景时的等待画面
-  
 		g_Sprm.Draw(hDC);
-	if(g_nScene==3)
-	{if(map.LoadMap(stage))
-		map.ShowMap(hDC,mapbk);
-	}			//绘制场景
-	//
+  	// 	if(g_nScene==3 && map.LoadMap(stage))
+			// map.ShowMap(hDC,mapbk);
+		
+
+	// if(!g_bInitScene)	//判断场景初始化是否完成
+	// 	g_pLoadScene->Draw(hDC,0,0);	//绘制加载场景时的等待画面
+	// else
+	// 	g_Sprm.Draw(hDC);				//绘制场景
+
+	// if(g_nScene==3)
+	// {	
+	// 	if(map.LoadMap(stage))
+	// 		map.ShowMap(hDC,mapbk);
+	// }			//绘制场景
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
