@@ -245,7 +245,8 @@ BOOL PlayScene_3(HWND hWnd)
 	g_pSprTestBK->SetDrawInfo(0,0,TRUE,(255,255,255));
 	g_pSprBox->SetDrawInfo(g_pPhyBox->GetLeftTop().x,g_pPhyBox->GetLeftTop().y,TRUE);
 	// g_pSprBox2->SetDrawInfo(g_pPhyBox2->GetLeftTop().x,g_pPhyBox2->GetLeftTop().y,TRUE);      //加了一个箱子
-	// mapbk -> set
+	
+	g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
 	
 	return TRUE;
 }
@@ -257,20 +258,6 @@ void GamePaint(HDC hDC)
 {
 	if(g_bInitScene)	//判断场景初始化是否完成
 		g_Sprm.Draw(hDC);
-  	// 	if(g_nScene==3 && map.LoadMap(stage))
-			// map.ShowMap(hDC,mapbk);
-		
-
-	// if(!g_bInitScene)	//判断场景初始化是否完成
-	// 	g_pLoadScene->Draw(hDC,0,0);	//绘制加载场景时的等待画面
-	// else
-	// 	g_Sprm.Draw(hDC);				//绘制场景
-
-	// if(g_nScene==3)
-	// {	
-	// 	if(map.LoadMap(stage))
-	// 		map.ShowMap(hDC,mapbk);
-	// }			//绘制场景
 	
 }
 
@@ -346,7 +333,6 @@ void KeyEvent(HWND hWnd)
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			velo+=1;
 			Y=15;
-			g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
 			X--;
 		}
 		else if(X==0&&Y>0)
@@ -357,7 +343,6 @@ void KeyEvent(HWND hWnd)
 			g_pPhyTest->SetMoveState(FALSE);
 			g_pPhyTest->SetVelo(0,5);
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
-			g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
 			Y--;
 			velo+=1;
 		}
@@ -385,7 +370,6 @@ void KeyEvent(HWND hWnd)
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			
 			//设置图像和绘图参数
-			g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
 			g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
 			if(g_pPhyBox->Collision(g_pPhyTest,BA_REBOUND,&r1))
 			{
@@ -399,7 +383,6 @@ void KeyEvent(HWND hWnd)
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			
 			//设置图像和绘图参数
-			g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
 			g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
 			if(g_pPhyBox->Collision(g_pPhyTest,BA_REBOUND,&r1))
 			{
@@ -413,7 +396,6 @@ void KeyEvent(HWND hWnd)
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			
 			//设置图像和绘图参数
-			g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
 			g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
 			if(g_pPhyBox->Collision(g_pPhyTest,BA_REBOUND,&r1))
 			{
@@ -427,7 +409,6 @@ void KeyEvent(HWND hWnd)
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			
 			//设置图像和绘图参数
-			g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
 			g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
 			if(g_pPhyBox->Collision(g_pPhyTest,BA_REBOUND,&r1))
 			{
@@ -448,7 +429,7 @@ void KeyEvent(HWND hWnd)
 		
 		else 			//如果没有方向键被按下
 		{
-			g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
+		
 		}
 		// if(x>0){
 		// 	g_pPhyTest2->SetVelo(direction,Velo);
