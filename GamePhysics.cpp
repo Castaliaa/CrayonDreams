@@ -108,6 +108,27 @@ void GamePhysics::UniformMove()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*判断是否落在了砖块上*/
+BOOL GamePhysics::TouchMapBricks()
+{
+	// 先人工设定一条边线
+	RECT prCollision;
+	RECT MapBricks;
+	MapBricks.left = 0;
+	MapBricks.right = 790;
+	MapBricks.top = 550;
+	MapBricks.bottom = 551;
+	if(IntersectRect(&prCollision, &GetCheckBox(), &MapBricks))
+		return true;
+	MapBricks.left = 0;
+	MapBricks.right = 100;
+	MapBricks.top = 449;
+	MapBricks.bottom = 450;
+	if(IntersectRect(&prCollision, &GetCheckBox(), &MapBricks))
+		return true;
+	else return false;
+}
+
 /* 加速度运动 */
 void	GamePhysics::ShiftMove()
 {
@@ -121,15 +142,24 @@ void	GamePhysics::ShiftMove()
 	//检查移动后的位置是否在焦点运动框内,如果不在焦点运动框内,
 	//则通过调用MoveTo()方法移动到最接近的位置,
 	//并停止运动,即设置运动状态为FALSE,设置速度ptVelo和加速度ptAccelerate为0
-	if(!IsPointInBound(pt,m_rFocusBound))	
+	if(!IsPointInBound(pt,m_rFocusBound))		// 碰到焦点框停止
 	{
 		// MoveToDes();
-		// TODO: 后续这个if语句的条件要改成触底之后停止，而不是碰到焦点框停止
 		SetMoveState(FALSE);
 		m_ptVelo.x=0;
 		m_ptVelo.y=0;
 		// SetVelo的同时也更新了步长
-		SetVelo(0, 5);
+		// SetVelo(0, 5);
+		m_ptAccelerate.x=0;
+		m_ptAccelerate.y=0;
+	}
+	// TODO:
+	else if(TouchMapBricks() && m_ptVelo.y > 0) //碰到砖块上边沿
+	{
+		// 停止继续下落
+		SetMoveState(FALSE);
+		m_ptVelo.x=0;
+		m_ptVelo.y=0;
 		m_ptAccelerate.x=0;
 		m_ptAccelerate.y=0;
 	}

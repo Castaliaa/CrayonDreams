@@ -4,6 +4,10 @@
 #include<string.h>
 #include "SpriteManage.h"	//包含精灵管理类
 #include "Sprite.h"
+#include "GamePhysics.h"
+// #include "GameProcess.h"
+#include <vector>		//包含vector
+using namespace std;	// 引用标准模板库std
 
 /*#define Land 0;
 #define Red_brick 1;
@@ -36,9 +40,6 @@
 #define ISTEXT(x) ((x)>=32 && (x)<=126)
 const int objectnum=19;//地图中物品总数
 
-
-
-
 struct MapObject
 {
 	int x;
@@ -51,7 +52,8 @@ struct MapObject
 
 class GameMap
 {
-
+private:
+	vector<GamePhysics*> m_vPhysicsManager;	//vector对象，用来地图物理指针
 public:
 	//地图数据
 
@@ -61,6 +63,8 @@ public:
 
 	void ShowMap(HDC hDc,Sprite* a);
 	void AddMap2SpriteManager(SpriteManage &Sprm); // 将地图物品添加到精灵管理类，取代ShowMap函数
+	BOOL AddMapObject(GamePhysics* pPhysics);		//添加物理指针
+	void Release(BOOL bDelPhysics=FALSE);			//释放资源
 
 	//地图切换
 	int FGetLineJumpCom(char *pchar,FILE *fp)

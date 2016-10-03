@@ -1,4 +1,5 @@
 #include "GameMap.h"
+// #include "GameProcess.h"
 int MapbkObjNum;//地图中背景物品数
 int nRectX[]={0,0,0,0,0,0,0,0};
 int nRectY[]={0,50,100,150,250,350,400,500};//所画物品在原图的起始坐标
@@ -7,6 +8,7 @@ int nRectHeight[]={50,50,50,100,100,100,50,100};//所画物品的宽度和高度    用数组
 
 GameMap::~GameMap()
 {
+	Release();	//释放资源
 }
 
 int GameMap::LoadMap(int stage)
@@ -97,7 +99,6 @@ void GameMap::AddMap2SpriteManager(SpriteManage &Sprm) // 将地图物品添加到精灵管
 {
 	int i, j, k;
 	int xstart, ystart;
-
 	for(i=0;i<MapbkObjNum;i++)
 	{
 		ystart=MapArray[i].y*50;
@@ -117,5 +118,45 @@ void GameMap::AddMap2SpriteManager(SpriteManage &Sprm) // 将地图物品添加到精灵管
 			}
 			ystart+=nRectHeight[MapArray[i].id];				
 		}
+		// TODO: 创建地图物品物理对象
+		if(MapArray[i].id == 1 || MapArray[i].id == 0) 
+		{
+			RECT rObject={MapArray[i].x*50, MapArray[i].y*50,
+					MapArray[i].x*50 + MapArray[i].w*nRectWidth[MapArray[i].id],
+					MapArray[i].y*50 + MapArray[i].h*nRectHeight[MapArray[i].id]};
+
+			RECT rBound={0,0,800,600};
+			// extern GameEngine * g_pGE;
+			// RECT rBound={0,0,g_pGE->GetWidth(),g_pGE->GetHeight()};
+			GamePhysics* pPhysics = new GamePhysics(rObject,rBound);
+			AddMapObject(pPhysics);
+		}
+	}
+}
+
+/*添加物理指针*/
+BOOL GameMap::AddMapObject(GamePhysics* pPhysics)
+{
+	if (pPhysics != NULL)			
+	{
+		m_vPhysicsManager.push_back(pPhysics);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/*释放资源*/
+void GameMap::Release(BOOL bDelPhysics)
+{
+	if (!m_vPhysicsManager.empty())	//判断容器是否为空
+	{
+		if(bDelPhysics)
+		{
+			vector<GamePhysics *>::iterator siPhysics;
+			for (siPhysics = m_vPhysicsManager.begin(); siPhysics != m_vPhysicsManager.end(); siPhysics++)
+				delete *siPhysics;	//删除精灵对象
+		}
+		m_vPhysicsManager.clear();			//删除容器中的精灵对象指针
+		vector<GamePhysics *>(m_vPhysicsManager).swap(m_vPhysicsManager);	//压缩容器
 	}
 }

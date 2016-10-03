@@ -384,6 +384,8 @@ public:
 	// 实现物体因重力而下落的效果  20161002
 	void Fall();
 
+	BOOL TouchMapBricks();
+
 
 	/*新增用于碰撞检测的相关方法*/
 
