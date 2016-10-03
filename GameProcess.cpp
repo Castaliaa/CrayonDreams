@@ -10,7 +10,7 @@
 BOOL GameInitialize(HINSTANCE hInstance)
 {
 	//创建引擎
-	g_pGE=new GameEngine(hInstance,TEXT("GameStart"),TEXT("Star Lost"),
+	g_pGE=new GameEngine(hInstance,TEXT("GameStart"),TEXT("不二工作室"),
 		IDI_BIGICON,IDI_SMALLICON,FALSE,32,800,600);
 	if(g_pGE==NULL)
 		return false;
@@ -177,7 +177,7 @@ BOOL InitScene_3(HWND hWnd)
 {
 	//载入背景
 	g_pSprTestBK=new Sprite(NULL,"resource\\TestBK.bmp");
-	mapbk=new Sprite(NULL,"resource\\mario.bmp");      //载入地图
+	// mapbk=new Sprite(NULL,"resource\\mario.bmp");      //载入地图
 
 	g_pSprBox=new Sprite(NULL,"resource\\TownBox.bmp");
 	// g_pSprBox2=new Sprite(NULL,"resource\\TownBox.bmp");                              //加了一个箱子
@@ -218,6 +218,11 @@ BOOL InitScene_3(HWND hWnd)
 	POINTF ptDes={300,300};
 	g_pPhyTest=new GamePhysics(rObject,rBound,ptFocus,ptVelo,ptAccelerate,ptDes,FALSE);
 	// g_pPhyTest2=new GamePhysics(rObject,rBound,ptFocus,ptVelo,ptAccelerate,ptDes,FALSE);/////////2
+
+	g_pPhyTest -> SetVelo(0, 0);
+	g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
+	g_pPhyTest -> SetMoveState(true);
+
 	
 	//创建箱子物理运动对象
 	RECT rObject1={308,326,308+g_pSprBox->GetWidth(),326+g_pSprBox->GetHeight()};
@@ -227,6 +232,11 @@ BOOL InitScene_3(HWND hWnd)
 	POINTF ptAccelerate1={0,0};
 	POINTF ptDes1={300,300};
 	g_pPhyBox=new GamePhysics(rObject1,rBound1,ptFocus1,ptVelo1,ptAccelerate1,ptDes1,FALSE);
+
+	g_pPhyBox -> SetVelo(0, 0);
+	g_pPhyBox -> SetAccelerate(g_gravityAcceleration);
+	g_pPhyBox -> SetMoveState(true);
+
 
 	//加了一个箱子,除了第一个参数有所修改（修改了出现的位置），其余都移植了第一个箱子的属性
  //    RECT rObject2={408,326,408+g_pSprBox->GetWidth(),326+g_pSprBox->GetHeight()};
@@ -247,7 +257,16 @@ BOOL PlayScene_3(HWND hWnd)
 	// g_pSprBox2->SetDrawInfo(g_pPhyBox2->GetLeftTop().x,g_pPhyBox2->GetLeftTop().y,TRUE);      //加了一个箱子
 	
 	g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
-	
+
+	// TODO:
+	// 实现重力，让星星和箱子落在砖块上
+	// 先实现星星落在地板上
+	// POINTF ptDes = {500, 500};
+	// g_pPhyTest -> SetDes(ptDes);
+	// g_pPhyTest -> SetMoveState(true);
+	// g_pPhyTest -> MoveToDes();
+	// g_pPhyTest -> SetMoveState(false);
+
 	return TRUE;
 }
 
@@ -323,49 +342,39 @@ void KeyEvent(HWND hWnd)
 		// {
 		// 	g_pPhyTest->CheckErr(TRUE);	
 		// }
-		if(X>0)
-		{		
-			g_pPhyTest->SetVelo(Direction,velo);
-			g_pPhyTest->SetMoveState(TRUE);
-			g_pPhyTest->ShiftMove();
-			//g_pPhyTest->SetMoveState(FALSE);
-			//g_pPhyTest->SetVelo(0,5);
-			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
-			velo+=1;
-			Y=15;
-			X--;
+		
+		if(g_pPhyBox -> GetMoveState())
+		{
+			g_pPhyBox -> ShiftMove();
 		}
-		else if(X==0&&Y>0)
-		{	
-			g_pPhyTest->SetVelo(Direction,velo);
-			g_pPhyTest->SetMoveState(TRUE);
-			g_pPhyTest->ShiftMove();
-			g_pPhyTest->SetMoveState(FALSE);
-			g_pPhyTest->SetVelo(0,5);
-			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
-			Y--;
-			velo+=1;
+
+		if(g_pPhyTest -> GetMoveState())
+		{
+			g_pPhyTest -> ShiftMove();
 		}
+
 		else if(GetAsyncKeyState(VK_SPACE)<0&&GetAsyncKeyState(VK_LEFT)==0&&GetAsyncKeyState(VK_RIGHT)==0)		//只有上方向键按下
 		{
-			velo=-14;
-			X=14;
-			Direction=0;
+			g_pPhyTest -> SetVelo(0, -10);
+			g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
+			g_pPhyTest -> SetMoveState(true);
 		}
 		else if(GetAsyncKeyState(VK_SPACE)<0&&GetAsyncKeyState(VK_LEFT)<0)		//判断左上方向键是否按下
 		{
-			velo=-14;
-			X=14;
-			Direction=-5;
+			g_pPhyTest -> SetVelo(-5, -10);
+			g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
+			g_pPhyTest -> SetMoveState(true);
 		}
 		else if(GetAsyncKeyState(VK_SPACE)<0&&GetAsyncKeyState(VK_RIGHT)<0)		//判断右上方向键是否按下
 		{
-			velo=-14;
-			X=14;	
-			Direction=5;
+			g_pPhyTest -> SetVelo(5, -10);
+			g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
+			g_pPhyTest -> SetMoveState(true);
 		}
+		
 		else if(GetAsyncKeyState(VK_UP)<0)
 		{	
+			// g_pPhyTest -> SetVelo(0, 5);
 			g_pPhyTest->MoveDirect(DI_UP);	//游戏者物理运动对象向上移动
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			
@@ -379,6 +388,7 @@ void KeyEvent(HWND hWnd)
 		}
 		else if(GetAsyncKeyState(VK_DOWN)<0)	//判断下方向键是否按下
 		{
+			// g_pPhyTest -> SetVelo(0, 5);
 			g_pPhyTest->MoveDirect(DI_DOWN);	//游戏者物理运动对象向上移动
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			
@@ -392,6 +402,8 @@ void KeyEvent(HWND hWnd)
 		}
 		else if(GetAsyncKeyState(VK_LEFT)<0)	//判断左方向键是否按下
 		{		
+			// g_pPhyTest -> SetVelo(-5, g_pPhyTest -> GetVelo().y);
+			g_pPhyTest -> SetVelo(-5, 0);
 			g_pPhyTest->MoveDirect(DI_LEFT);	//游戏者物理运动对象向上移动
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			
@@ -402,9 +414,12 @@ void KeyEvent(HWND hWnd)
 				g_pPhyBox->MoveDirect(DI_LEFT);	//游戏者物理运动对象向上移动
 				g_pPhyBox->CheckErr(TRUE);	
 			}
+			g_pPhyTest -> SetVelo(0, 0);
 		}
 		else if(GetAsyncKeyState(VK_RIGHT)<0)	//判断右方向键是否按下
 		{	
+			// g_pPhyTest -> SetVelo(5, g_pPhyTest -> GetVelo().y);
+			g_pPhyTest -> SetVelo(5, 0);
 			g_pPhyTest->MoveDirect(DI_RIGHT);	//游戏者物理运动对象向上移动
 			g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
 			
@@ -415,6 +430,7 @@ void KeyEvent(HWND hWnd)
 				g_pPhyBox->MoveDirect(DI_RIGHT);	//游戏者物理运动对象向上移动
 				g_pPhyBox->CheckErr(TRUE);	
 			}
+			g_pPhyTest -> SetVelo(0, 0);
 		}
 		else if(GetAsyncKeyState(VK_PRIOR)<0)	//按下PageUp键，背景音乐音量增大
 			g_pMscBGM->VolumeUp();
@@ -429,7 +445,14 @@ void KeyEvent(HWND hWnd)
 		
 		else 			//如果没有方向键被按下
 		{
-		
+			g_pPhyTest -> SetVelo(0, 0);
+			g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
+			g_pPhyTest -> SetMoveState(true);
+
+			g_pPhyBox -> SetVelo(0, 0);
+			g_pPhyBox -> SetAccelerate(g_gravityAcceleration);
+			g_pPhyBox -> SetMoveState(true);
+
 		}
 		// if(x>0){
 		// 	g_pPhyTest2->SetVelo(direction,Velo);

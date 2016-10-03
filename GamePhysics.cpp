@@ -123,10 +123,13 @@ void	GamePhysics::ShiftMove()
 	//并停止运动,即设置运动状态为FALSE,设置速度ptVelo和加速度ptAccelerate为0
 	if(!IsPointInBound(pt,m_rFocusBound))	
 	{
-		MoveToDes();
+		// MoveToDes();
+		// TODO: 后续这个if语句的条件要改成触底之后停止，而不是碰到焦点框停止
 		SetMoveState(FALSE);
 		m_ptVelo.x=0;
 		m_ptVelo.y=0;
+		// SetVelo的同时也更新了步长
+		SetVelo(0, 5);
 		m_ptAccelerate.x=0;
 		m_ptAccelerate.y=0;
 	}
@@ -427,4 +430,16 @@ BOOL GamePhysics::CheckErr(BOOL bRectify)
 		SetMoveState(FALSE);
 	}
 	return TRUE;
+}
+
+// 实现物体因重力而下落的效果  20161002
+void GamePhysics::Fall()
+{
+	// SetDes(m_ptPos.x, (float)m_rFocusBound.bottom);
+	SetMoveState(true);
+	// MoveToDes();
+	// SetAccelerate(0, 0.1);
+	ShiftMove();
+	SetMoveState(false);
+	// SetVelo(0, 5);
 }
