@@ -65,6 +65,7 @@ public:
 	void AddMap2SpriteManager(SpriteManage &Sprm); // 将地图物品添加到精灵管理类，取代ShowMap函数
 	BOOL AddMapObject(GamePhysics* pPhysics);		//添加物理指针
 	void Release(BOOL bDelPhysics=FALSE);			//释放资源
+	vector<GamePhysics*> GetMapPhysics() {return m_vPhysicsManager;}
 
 	//地图切换
 	int FGetLineJumpCom(char *pchar,FILE *fp)

@@ -9,6 +9,8 @@
 #include "windows.h"
 #include "stdio.h"
 #include "math.h"
+#include <vector>		//包含vector
+using namespace std;	// 引用标准模板库std
 
 //定义碰撞后的动作常量
 typedef		int		BOUNDACTION;
@@ -366,6 +368,9 @@ public:
 
 	//加速度运动
 	void	ShiftMove();
+	// 有地图障碍物的加速度运动
+	void	ShiftMove(GamePhysics* ph);
+	void	ShiftMove(vector<GamePhysics*> v_ph);
 	
 	//移动到目标点
 	void	MoveToDes();
@@ -380,12 +385,14 @@ public:
 	BOOL  IsPointInBound(POINTF pt,RECT r);
 
 	BOOL CheckErr(BOOL bRectify);
+	BOOL CheckErr(GamePhysics* ph, BOOL bRectify);
+	BOOL CheckErr(vector<GamePhysics*> v_ph, BOOL bRectify);
 
 	// 实现物体因重力而下落的效果  20161002
 	void Fall();
 
 	BOOL TouchMapBricks();
-
+	BOOL TouchMapBricks(vector<GamePhysics*> v_ph);
 
 	/*新增用于碰撞检测的相关方法*/
 
@@ -395,11 +402,12 @@ public:
 	{
 		int w=(int)((rObject.right-rObject.left)*0.1);
 		int h=(int)((rObject.bottom-rObject.top)*0.1);
-
+		// w=0;h=0;
 		m_rCheckBox.left=rObject.left+w;
 		m_rCheckBox.right=rObject.right-w;
 		m_rCheckBox.top=rObject.top+h;
 		m_rCheckBox.bottom=rObject.bottom-h;
+		// m_rCheckBox = rObject;
 	}
 
 	//获取碰撞检测矩形
@@ -413,6 +421,9 @@ public:
 
 	// 当前物体按给定速度进行直线移动,另一物体ph也按其给定速度进行直线运动,对两个物体的碰撞进行检测,当发生碰撞时,按action指定的方式动作
 	BOOL	Collision(GamePhysics  * ph, BOUNDACTION action,RECT * rCollision);
+
+	// 重载Collision，输入vector
+	BOOL Collision(vector<GamePhysics*> v_ph, BOUNDACTION action, RECT *rCollision);
 
 };
 

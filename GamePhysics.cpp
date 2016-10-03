@@ -129,6 +129,17 @@ BOOL GamePhysics::TouchMapBricks()
 	else return false;
 }
 
+BOOL GamePhysics::TouchMapBricks(vector<GamePhysics*> v_ph)
+{
+	// for (int i = 0; i < v_ph.size(); ++i)
+	// {
+	// 	if(Collision(v_ph[i], action, rCollision))
+	// 		return true;
+	// }
+	return false;
+}
+
+
 /* 加速度运动 */
 void	GamePhysics::ShiftMove()
 {
@@ -154,7 +165,51 @@ void	GamePhysics::ShiftMove()
 		m_ptAccelerate.y=0;
 	}
 	// TODO:
-	else if(TouchMapBricks() && m_ptVelo.y > 0) //碰到砖块上边沿
+	else if( m_ptVelo.y > 0 && TouchMapBricks()) //碰到砖块上边沿
+	{
+		// 停止继续下落
+		SetMoveState(FALSE);
+		m_ptVelo.x=0;
+		m_ptVelo.y=0;
+		m_ptAccelerate.x=0;
+		m_ptAccelerate.y=0;
+	}
+	else
+	{
+		//如果移动后的位置在焦点运动框内,则移动到该位置
+		SetPos(pt);
+
+		//改变初速度为加速后的速度，在下次调用时将使用加速后的速度为初速度
+		POINTF ptv=m_ptVelo;
+		ptv=ptv+m_ptAccelerate;
+		SetVelo(ptv);
+	}
+}
+
+// 有地图障碍物的加速度运动
+void GamePhysics::ShiftMove(vector<GamePhysics*> v_ph)
+{
+	if(! GetMoveState())	//检查运动状态
+		return ;
+
+	//计算移动后的位置
+	POINTF pt;
+	pt=m_ptPos+m_ptVelo;
+
+	//检查移动后的位置是否在焦点运动框内,如果不在焦点运动框内,
+	//则通过调用MoveTo()方法移动到最接近的位置,
+	//并停止运动,即设置运动状态为FALSE,设置速度ptVelo和加速度ptAccelerate为0
+	if(!IsPointInBound(pt,m_rFocusBound))		// 碰到焦点框停止
+	{
+		// MoveToDes();
+		SetMoveState(FALSE);
+		m_ptVelo.x=0;
+		m_ptVelo.y=0;
+		m_ptAccelerate.x=0;
+		m_ptAccelerate.y=0;
+	}
+	// TODO:
+	else if( m_ptVelo.y > 0 && CheckErr(v_ph, FALSE)) //碰到砖块上边沿
 	{
 		// 停止继续下落
 		SetMoveState(FALSE);
@@ -433,6 +488,20 @@ BOOL	GamePhysics::Collision(	GamePhysics * ph, BOUNDACTION action,RECT * prColli
 		return FALSE;
 }
 
+
+BOOL GamePhysics::Collision(vector<GamePhysics*> v_ph, BOUNDACTION action, RECT *rCollision)
+{
+	for (int i = 0; i < v_ph.size(); ++i)
+	{
+		if(Collision(v_ph[i], action, rCollision))
+			return true;
+	}
+	return false;
+}
+
+
+
+
 /*检查对象是否已超出焦点框，如果未超出，返回FALSE;
 如果超出，则返回TRUE，如果bRectify为TRUE，将把对象位置设置到最近的焦点框边缘*/
 BOOL GamePhysics::CheckErr(BOOL bRectify)
@@ -460,6 +529,45 @@ BOOL GamePhysics::CheckErr(BOOL bRectify)
 		SetMoveState(FALSE);
 	}
 	return TRUE;
+}
+
+BOOL GamePhysics::CheckErr(GamePhysics* ph, BOOL bRectify)
+{
+	RECT r1;
+	// if(IntersectRect(&r1, &GetObjectRect(), &(ph->GetObjectRect())))
+	if(IntersectRect(&r1,&GetCheckBox(),&(ph->GetCheckBox())))
+	{
+		if(bRectify)
+		{
+			//计算距焦点框的最近位置
+			POINTF pt=m_ptPos;
+			if((m_ptPos.x+GetWidth()*0.9>ph->GetCheckBox().left)&&(m_ptPos.x<ph->GetCheckBox().left)
+				&&(m_ptPos.x+GetWidth()*0.5<ph->GetCheckBox().left))
+				pt.x=(float)(ph->GetCheckBox().left-GetWidth()*0.9);
+			else if((m_ptPos.x+GetWidth()*0.1<ph->GetCheckBox().right)&&(m_ptPos.x+GetWidth()*0.5>ph->GetCheckBox().right))
+				pt.x=(float)(ph->GetCheckBox().right-GetWidth()*0.1);
+			else if((m_ptPos.y+GetHeight()*0.9>ph->GetCheckBox().top)&&(m_ptPos.y<ph->GetCheckBox().top))
+				pt.y=(float)(ph->GetCheckBox().top-GetHeight()*0.9);
+			else if(m_ptPos.y+GetHeight()*0.1<ph->GetCheckBox().bottom)
+				pt.y=(float)(ph->GetCheckBox().bottom-GetHeight()*0.1);
+
+			SetPos(pt);			//设置到修正后的位置
+			SetMoveState(FALSE);
+		}
+		return TRUE;
+	}
+	return FALSE;
+}
+
+BOOL GamePhysics::CheckErr(vector<GamePhysics*> v_ph, BOOL bRectify)
+{
+	BOOL flag = FALSE;
+	for (int i = 0; i < v_ph.size(); ++i)
+	{
+		if(CheckErr(v_ph[i], bRectify))
+			flag = TRUE;
+	}
+	return flag;
 }
 
 // 实现物体因重力而下落的效果  20161002
