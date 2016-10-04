@@ -209,7 +209,18 @@ void GamePhysics::ShiftMove(vector<GamePhysics*> v_ph)
 		m_ptAccelerate.y=0;
 	}
 	// TODO:
-	else if( m_ptVelo.y > 0 && CheckErr(v_ph, FALSE)) //碰到砖块上边沿
+	else if( m_ptVelo.y < 0 && CheckErr(v_ph, TRUE)) //碰到砖块下边沿
+	{
+		// 反弹
+		m_ptVelo.y=-m_ptVelo.y / 2;
+		// m_ptVelo.y = 0;
+		pt=m_ptPos+m_ptVelo;
+		SetPos(pt);
+		POINTF ptv=m_ptVelo;
+		ptv=ptv+m_ptAccelerate;
+		SetVelo(ptv);
+	}
+	else if( m_ptVelo.y > 0 && CheckErr(v_ph, TRUE)) //碰到砖块上边沿
 	{
 		// 停止继续下落
 		SetMoveState(FALSE);
@@ -552,7 +563,12 @@ BOOL GamePhysics::CheckErr(GamePhysics* ph, BOOL bRectify)
 				pt.y=(float)(ph->GetCheckBox().bottom-GetHeight()*0.1);
 
 			SetPos(pt);			//设置到修正后的位置
-			SetMoveState(FALSE);
+			if(m_ptVelo.y > 0)
+				SetMoveState(FALSE);
+			// else {
+			// 	m_ptVelo.y = -m_ptVelo.y;
+			// 	SetMoveState(TRUE);
+			// }
 		}
 		return TRUE;
 	}
