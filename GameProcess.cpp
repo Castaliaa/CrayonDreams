@@ -345,7 +345,7 @@ void KeyEvent(HWND hWnd)
 		{
 			g_pPhyTest -> SetVelo(0, 0);
 			g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
-			// g_pPhyTest -> SetMoveState(true);
+			g_pPhyTest -> SetMoveState(true);
 		}
 
 		if(GetAsyncKeyState(VK_UP)<0 || GetAsyncKeyState(VK_LEFT)<0 || GetAsyncKeyState(VK_RIGHT)<0)
@@ -364,14 +364,18 @@ void KeyEvent(HWND hWnd)
 			}
 			
 			if(GetAsyncKeyState(VK_UP)<0)
-			{
 				if( !l_VKUP_pressed)
 				{
 					l_VKUP_pressed = TRUE;
-					g_pPhyTest -> SetVelo(g_pPhyTest -> GetVelo().x, -10);
-					g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
-					g_pPhyTest -> SetMoveState(true);
-					g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
+					POINTF velotemp = g_pPhyTest -> GetVelo();
+					float temp = abs(g_pPhyTest -> GetVelo().y);
+					if(!(g_pPhyTest -> GetJump()))
+					{
+						g_pPhyTest -> SetVelo(g_pPhyTest -> GetVelo().x, -10);
+						g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
+						g_pPhyTest -> SetMoveState(true);
+						g_pPhyTest -> SetJump(TRUE);
+					}
 				}
 			} else {
 				l_VKUP_pressed = FALSE;
@@ -394,7 +398,7 @@ void KeyEvent(HWND hWnd)
 			g_pMscBGM->Play(300,TRUE);
 		else if(GetAsyncKeyState(VK_END )<0)	//按下End键，停止播放背景音乐
 			g_pMscBGM->Stop();
-		if(GetAsyncKeyState(VK_ESCAPE)<0 )	//判断ESC键是否按下
+		else if(GetAsyncKeyState(VK_ESCAPE)<0 )	//判断ESC键是否按下
 			SendMessage(hWnd,WM_CLOSE,0,0);     //退出程序
 	}
 }
