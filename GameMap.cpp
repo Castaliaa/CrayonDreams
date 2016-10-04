@@ -129,6 +129,7 @@ void GameMap::AddMap2SpriteManager(SpriteManage &Sprm) // 将地图物品添加到精灵管
 			// extern GameEngine * g_pGE;
 			// RECT rBound={0,0,g_pGE->GetWidth(),g_pGE->GetHeight()};
 			GamePhysics* pPhysics = new GamePhysics(rObject,rBound);
+			pPhysics -> SetCheckBox();
 			AddMapObject(pPhysics);
 		}
 	}

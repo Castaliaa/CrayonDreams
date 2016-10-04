@@ -409,6 +409,11 @@ public:
 		m_rCheckBox.bottom=rObject.bottom-h;
 		// m_rCheckBox = rObject;
 	}
+	// 增加一个与物体形状一致的CheckBox，应用于地图物品
+	void SetCheckBox()
+	{
+		m_rCheckBox = m_rObject;
+	}
 
 	//获取碰撞检测矩形
 	RECT GetCheckBox()

@@ -225,7 +225,7 @@ BOOL InitScene_3(HWND hWnd)
 
 	
 	//创建箱子物理运动对象
-	RECT rObject1={200,226,200+g_pSprBox->GetWidth(),226+g_pSprBox->GetHeight()};
+	RECT rObject1={67,226,67+g_pSprBox->GetWidth(),226+g_pSprBox->GetHeight()};
 	RECT rBound1={0,0,g_pGE->GetWidth(),g_pGE->GetHeight()};
 	POINTF ptFocus1={0,0};
 	POINTF ptVelo1={0,0};
@@ -347,7 +347,7 @@ void KeyEvent(HWND hWnd)
 		if(g_pPhyBox -> GetMoveState())
 		{
 			g_pPhyBox -> ShiftMove(g_Map.GetMapPhysics());
-			g_pPhyTest -> CheckErr(g_Map.GetMapPhysics(), TRUE);
+			g_pPhyBox -> CheckErr(g_Map.GetMapPhysics(), TRUE);
 		}
 
 		if(g_pPhyTest -> GetMoveState())
