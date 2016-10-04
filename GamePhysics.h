@@ -93,8 +93,6 @@ protected:
 
 	RECT	m_rCheckBox;		//碰撞检测框
 
-	BOOL m_bJumpState;
-
 public:
 	//构造函数
 	GamePhysics();	
@@ -317,15 +315,6 @@ public:
 	{
 		return m_ptVelo;
 	};
-
-	void SetJump(BOOL b)
-	{
-		m_bJumpState = b;
-	}
-	BOOL GetJump()
-	{
-		return m_bJumpState;
-	}
 
 	//获取运动方向
 	DIRECTION GetDirect()

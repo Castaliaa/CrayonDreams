@@ -81,7 +81,6 @@ void GamePhysics::SetObject(RECT rObject,RECT rBound,POINTF ptFocus,
 
 	//设置对象运动的加速度
 	SetAccelerate(ptAccelerate);
-	m_bJumpState = FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,7 +186,6 @@ void GamePhysics::ShiftMove(vector<GamePhysics*> v_ph)
 		// 因为外部的CheckErr，这一段实际上并不会被执行
 		// 停止继续下落
 		SetMoveState(FALSE);
-		SetJump(FALSE);
 		m_ptVelo.x=0;
 		m_ptVelo.y=0;
 		// m_ptAccelerate.x=0;
@@ -529,7 +527,6 @@ BOOL GamePhysics::CheckErr(GamePhysics* ph, BOOL bRectify)
 			SetPos(pt);			//设置到修正后的位置
 			if(m_ptVelo.y > 0){
 				SetMoveState(FALSE);
-				SetJump(FALSE);
 				m_ptVelo.y = 0;
 			}
 				

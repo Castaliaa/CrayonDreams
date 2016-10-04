@@ -364,22 +364,14 @@ void KeyEvent(HWND hWnd)
 			}
 			
 			if(GetAsyncKeyState(VK_UP)<0)
-			// if(GetAsyncKeyState(VK_UP)&0x8001)
 			{
 				if( !l_VKUP_pressed)
 				{
 					l_VKUP_pressed = TRUE;
-					POINTF velotemp = g_pPhyTest -> GetVelo();
-					float temp = abs(g_pPhyTest -> GetVelo().y);
-					// if(temp < 0.01)
-					// if(g_pPhyTest -> CheckErr(g_Map.GetMapPhysics(), FALSE))
-					// if(!(g_pPhyTest -> GetJump()))
-					// {
-						g_pPhyTest -> SetVelo(g_pPhyTest -> GetVelo().x, -10);
-						g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
-						g_pPhyTest -> SetMoveState(true);
-						// g_pPhyTest -> SetJump(TRUE);
-					// }
+					g_pPhyTest -> SetVelo(g_pPhyTest -> GetVelo().x, -10);
+					g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
+					g_pPhyTest -> SetMoveState(true);
+					g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
 				}
 			} else {
 				l_VKUP_pressed = FALSE;
@@ -394,108 +386,6 @@ void KeyEvent(HWND hWnd)
 			// g_pPhyTest -> SetMoveState(true);
 		}
 		
-
-		// else if(GetAsyncKeyState(VK_UP)<0&&GetAsyncKeyState(VK_LEFT)==0&&GetAsyncKeyState(VK_RIGHT)==0)		//只有上方向键按下
-		// {
-		// 	g_pPhyTest -> SetVelo(0, -10);
-		// 	g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
-		// 	g_pPhyTest -> SetMoveState(true);
-		// }
-		// else if(GetAsyncKeyState(VK_UP)<0&&GetAsyncKeyState(VK_LEFT)<0)		//判断左上方向键是否按下
-		// {
-		// 	g_pPhyTest -> SetVelo(-5, -10);
-		// 	g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
-		// 	g_pPhyTest -> SetMoveState(true);
-		// }
-		// else if(GetAsyncKeyState(VK_UP)<0&&GetAsyncKeyState(VK_RIGHT)<0)		//判断右上方向键是否按下
-		// {
-		// 	g_pPhyTest -> SetVelo(5, -10);
-		// 	g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
-		// 	g_pPhyTest -> SetMoveState(true);
-		// }
-		
-		// else if(GetAsyncKeyState(VK_SPACE)<0)
-		// {	
-		// 	g_pPhyTest -> SetVelo(0, -5);
-		// 	g_pPhyTest->MoveDirect(DI_UP);	//游戏者物理运动对象向上移动
-		// 	g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
-		// 	g_pPhyTest -> CheckErr(g_Map.GetMapPhysics(), TRUE);
-			
-		// 	//设置图像和绘图参数
-		// 	g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
-		// 	if(g_pPhyBox->Collision(g_pPhyTest,BA_STOP,&r1))
-		// 	{
-		// 		g_pPhyBox->MoveDirect(DI_UP);	//游戏者物理运动对象向上移动
-		// 		g_pPhyBox->CheckErr(TRUE);
-		// 		g_pPhyBox -> CheckErr(g_Map.GetMapPhysics(), TRUE);
-		// 	}
-		// 	g_pPhyTest -> SetVelo(0, 0);
-		// }
-		// else if(GetAsyncKeyState(VK_DOWN)<0)	//判断下方向键是否按下
-		// {
-		// 	g_pPhyTest -> SetVelo(0, 5);
-		// 	g_pPhyTest->MoveDirect(DI_DOWN);	//游戏者物理运动对象向上移动
-		// 	g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
-		// 	g_pPhyTest -> CheckErr(g_Map.GetMapPhysics(), TRUE);
-			
-		// 	//设置图像和绘图参数
-		// 	g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
-		// 	if(g_pPhyBox->Collision(g_pPhyTest,BA_STOP,&r1))
-		// 	{
-		// 		g_pPhyBox->MoveDirect(DI_DOWN);	//游戏者物理运动对象向上移动
-		// 		g_pPhyBox->CheckErr(TRUE);	
-		// 		g_pPhyBox -> CheckErr(g_Map.GetMapPhysics(), TRUE);
-		// 	}
-		// 	g_pPhyTest -> SetVelo(0, 0);
-		// }
-		
-		// else if(GetAsyncKeyState(VK_LEFT)<0)	//判断左方向键是否按下
-		// {		
-		// 	// if(!(g_pPhyTest -> Collision(g_Map.GetMapPhysics(), BA_STOP, &r1)))
-		// 	// {
-		// 					// g_pPhyTest -> SetVelo(-5, g_pPhyTest -> GetVelo().y);
-		// 		g_pPhyTest -> SetVelo(-5, 0);
-		// 		// g_pPhyTest -> SetMoveState(true);
-		// 		// g_pPhyTest -> ShiftMove();
-		// 		g_pPhyTest->MoveDirect(DI_LEFT);	//游戏者物理运动对象向上移动
-		// 		g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
-		// 		g_pPhyTest -> CheckErr(g_Map.GetMapPhysics(), TRUE);
-				
-		// 		//设置图像和绘图参数
-		// 		g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
-		// 		if(g_pPhyBox->Collision(g_pPhyTest,BA_STOP,&r1))
-		// 		{
-		// 			g_pPhyBox->MoveDirect(DI_LEFT);	//游戏者物理运动对象向上移动
-		// 			g_pPhyBox->CheckErr(TRUE);	
-		// 			g_pPhyBox -> CheckErr(g_Map.GetMapPhysics(), TRUE);
-		// 		}
-		// 		g_pPhyTest -> SetVelo(0, 0);
-		// 	// }
-		// }
-		// else if(GetAsyncKeyState(VK_RIGHT)<0)	//判断右方向键是否按下
-		// {	
-		// 	// if(!(g_pPhyTest -> Collision(g_Map.GetMapPhysics(), BA_STOP, &r1))) 
-		// 	// {
-		// 		// g_pPhyTest -> SetVelo(5, g_pPhyTest -> GetVelo().y);
-		// 		g_pPhyTest -> SetVelo(5, 0);
-		// 		// g_pPhyTest -> SetMoveState(true);
-		// 		// g_pPhyTest -> ShiftMove();
-		// 		g_pPhyTest->MoveDirect(DI_RIGHT);	//游戏者物理运动对象向上移动
-		// 		g_pPhyTest->CheckErr(TRUE);	//检查是否超出焦点框
-		// 		g_pPhyTest -> CheckErr(g_Map.GetMapPhysics(), TRUE);
-
-		// 		//设置图像和绘图参数
-		// 		g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
-		// 		if(g_pPhyBox->Collision(g_pPhyTest,BA_STOP,&r1))
-		// 		{
-		// 			g_pPhyBox->MoveDirect(DI_RIGHT);	//游戏者物理运动对象向上移动
-		// 			g_pPhyBox->CheckErr(TRUE);	
-		// 			g_pPhyBox -> CheckErr(g_Map.GetMapPhysics(), TRUE);
-		// 		}
-		// 		g_pPhyTest -> SetVelo(0, 0);
-		// 	// }
-		// }
-		
 		if(GetAsyncKeyState(VK_PRIOR)<0)	//按下PageUp键，背景音乐音量增大
 			g_pMscBGM->VolumeUp();
 		else if(GetAsyncKeyState(VK_NEXT)<0)	//按下PageDown键，背景音乐音量减小
@@ -504,20 +394,8 @@ void KeyEvent(HWND hWnd)
 			g_pMscBGM->Play(300,TRUE);
 		else if(GetAsyncKeyState(VK_END )<0)	//按下End键，停止播放背景音乐
 			g_pMscBGM->Stop();
-		else if(GetAsyncKeyState(VK_ESCAPE)<0 )	//判断ESC键是否按下
+		if(GetAsyncKeyState(VK_ESCAPE)<0 )	//判断ESC键是否按下
 			SendMessage(hWnd,WM_CLOSE,0,0);     //退出程序
-		
-		else 			//如果没有方向键被按下
-		{
-			// g_pPhyTest -> SetVelo(0, 0);
-			// g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
-			// g_pPhyTest -> SetMoveState(true);
-
-			// g_pPhyBox -> SetVelo(0, 0);
-			// g_pPhyBox -> SetAccelerate(g_gravityAcceleration);
-			// g_pPhyBox -> SetMoveState(true);
-
-		}
 	}
 }
 
