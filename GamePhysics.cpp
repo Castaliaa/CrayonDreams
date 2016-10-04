@@ -51,6 +51,7 @@ void GamePhysics::SetObject(RECT rObject,RECT rBound)
 	POINTF ptDes=ptPos;			//有效目标点为对象范围左上角坐标
 	SetObject(rObject,rBound,ptFocus,ptVelo,ptAccelerate,ptDes,FALSE);
 	m_bPathArrive=TRUE;
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,6 +81,7 @@ void GamePhysics::SetObject(RECT rObject,RECT rBound,POINTF ptFocus,
 
 	//设置对象运动的加速度
 	SetAccelerate(ptAccelerate);
+	m_bJumpState = FALSE;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,14 +181,17 @@ void GamePhysics::ShiftMove(vector<GamePhysics*> v_ph)
 		ptv=ptv+m_ptAccelerate;
 		SetVelo(ptv);
 	}
+
 	else if( m_ptVelo.y > 0 && CheckErr(v_ph, TRUE)) //碰到砖块上边沿
 	{
+		// 因为外部的CheckErr，这一段实际上并不会被执行
 		// 停止继续下落
 		SetMoveState(FALSE);
+		SetJump(FALSE);
 		m_ptVelo.x=0;
 		m_ptVelo.y=0;
-		m_ptAccelerate.x=0;
-		m_ptAccelerate.y=0;
+		// m_ptAccelerate.x=0;
+		// m_ptAccelerate.y=0;
 	}
 	else
 	{
@@ -522,8 +527,12 @@ BOOL GamePhysics::CheckErr(GamePhysics* ph, BOOL bRectify)
 				pt.y=(float)(ph->GetCheckBox().bottom-GetHeight()*0.1);
 
 			SetPos(pt);			//设置到修正后的位置
-			if(m_ptVelo.y > 0)
+			if(m_ptVelo.y > 0){
 				SetMoveState(FALSE);
+				SetJump(FALSE);
+				m_ptVelo.y = 0;
+			}
+				
 			// else {
 			// 	m_ptVelo.y = -m_ptVelo.y;
 			// 	SetMoveState(TRUE);
