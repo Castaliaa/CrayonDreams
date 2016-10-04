@@ -388,12 +388,6 @@ public:
 	BOOL CheckErr(GamePhysics* ph, BOOL bRectify);
 	BOOL CheckErr(vector<GamePhysics*> v_ph, BOOL bRectify);
 
-	// 实现物体因重力而下落的效果  20161002
-	void Fall();
-
-	BOOL TouchMapBricks();
-	BOOL TouchMapBricks(vector<GamePhysics*> v_ph);
-
 	/*新增用于碰撞检测的相关方法*/
 
 

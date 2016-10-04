@@ -108,37 +108,6 @@ void GamePhysics::UniformMove()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*判断是否落在了砖块上*/
-BOOL GamePhysics::TouchMapBricks()
-{
-	// 先人工设定一条边线
-	RECT prCollision;
-	RECT MapBricks;
-	MapBricks.left = 0;
-	MapBricks.right = 790;
-	MapBricks.top = 550;
-	MapBricks.bottom = 551;
-	if(IntersectRect(&prCollision, &GetCheckBox(), &MapBricks))
-		return true;
-	MapBricks.left = 0;
-	MapBricks.right = 100;
-	MapBricks.top = 449;
-	MapBricks.bottom = 450;
-	if(IntersectRect(&prCollision, &GetCheckBox(), &MapBricks))
-		return true;
-	else return false;
-}
-
-BOOL GamePhysics::TouchMapBricks(vector<GamePhysics*> v_ph)
-{
-	// for (int i = 0; i < v_ph.size(); ++i)
-	// {
-	// 	if(Collision(v_ph[i], action, rCollision))
-	// 		return true;
-	// }
-	return false;
-}
-
 
 /* 加速度运动 */
 void	GamePhysics::ShiftMove()
@@ -161,16 +130,6 @@ void	GamePhysics::ShiftMove()
 		m_ptVelo.y=0;
 		// SetVelo的同时也更新了步长
 		// SetVelo(0, 5);
-		m_ptAccelerate.x=0;
-		m_ptAccelerate.y=0;
-	}
-	// TODO:
-	else if( m_ptVelo.y > 0 && TouchMapBricks()) //碰到砖块上边沿
-	{
-		// 停止继续下落
-		SetMoveState(FALSE);
-		m_ptVelo.x=0;
-		m_ptVelo.y=0;
 		m_ptAccelerate.x=0;
 		m_ptAccelerate.y=0;
 	}
@@ -584,16 +543,4 @@ BOOL GamePhysics::CheckErr(vector<GamePhysics*> v_ph, BOOL bRectify)
 			flag = TRUE;
 	}
 	return flag;
-}
-
-// 实现物体因重力而下落的效果  20161002
-void GamePhysics::Fall()
-{
-	// SetDes(m_ptPos.x, (float)m_rFocusBound.bottom);
-	SetMoveState(true);
-	// MoveToDes();
-	// SetAccelerate(0, 0.1);
-	ShiftMove();
-	SetMoveState(false);
-	// SetVelo(0, 5);
 }
