@@ -163,11 +163,11 @@ void GamePhysics::ShiftMove(vector<GamePhysics*> v_ph)
 	if(!IsPointInBound(pt,m_rFocusBound))		// 碰到焦点框停止
 	{
 		// MoveToDes();
-		SetMoveState(FALSE);
+		// SetMoveState(FALSE);
 		m_ptVelo.x=0;
 		m_ptVelo.y=0;
-		m_ptAccelerate.x=0;
-		m_ptAccelerate.y=0;
+		// m_ptAccelerate.x=0;
+		// m_ptAccelerate.y=0;
 	}
 	// TODO:
 	else if( m_ptVelo.y < 0 && CheckErr(v_ph, TRUE)) //碰到砖块下边沿
@@ -186,7 +186,7 @@ void GamePhysics::ShiftMove(vector<GamePhysics*> v_ph)
 	{
 		// 因为外部的CheckErr，这一段实际上并不会被执行
 		// 停止继续下落
-		SetMoveState(FALSE);
+		// SetMoveState(FALSE);
 		SetJump(FALSE);
 		m_ptVelo.x=0;
 		m_ptVelo.y=0;
@@ -501,7 +501,7 @@ BOOL GamePhysics::CheckErr(BOOL bRectify)
 			pt.y=(float)m_rFocusBound.bottom;
 
 		SetPos(pt);			//设置到修正后的位置
-		SetMoveState(FALSE);
+		// SetMoveState(FALSE);
 	}
 	return TRUE;
 }
@@ -528,7 +528,7 @@ BOOL GamePhysics::CheckErr(GamePhysics* ph, BOOL bRectify)
 
 			SetPos(pt);			//设置到修正后的位置
 			if(m_ptVelo.y > 0){
-				SetMoveState(FALSE);
+				// SetMoveState(FALSE);
 				SetJump(FALSE);
 				m_ptVelo.y = 0;
 			}

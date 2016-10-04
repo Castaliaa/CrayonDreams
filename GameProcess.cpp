@@ -210,7 +210,7 @@ BOOL InitScene_3(HWND hWnd)
 	g_pMscBGM->Play(300,TRUE);	//重复播放音乐	
 	
 	//创建游戏者星星物理运动对象
-	RECT rObject={560,100,560+g_pSprTestAnima1->GetWidth()/6,100+g_pSprTestAnima1->GetHeight()/2};
+	RECT rObject={0,450,0+g_pSprTestAnima1->GetWidth()/6,450+g_pSprTestAnima1->GetHeight()/2};
 	RECT rBound={0,0,g_pGE->GetWidth(),g_pGE->GetHeight()};
 	POINTF ptFocus={0,0};
 	POINTF ptVelo={0,5};
@@ -225,7 +225,7 @@ BOOL InitScene_3(HWND hWnd)
 
 	
 	//创建箱子物理运动对象
-	RECT rObject1={67,226,67+g_pSprBox->GetWidth(),226+g_pSprBox->GetHeight()};
+	RECT rObject1={600,500,600+g_pSprBox->GetWidth(),500+g_pSprBox->GetHeight()};
 	RECT rBound1={0,0,g_pGE->GetWidth(),g_pGE->GetHeight()};
 	POINTF ptFocus1={0,0};
 	POINTF ptVelo1={0,0};
@@ -335,11 +335,21 @@ void KeyEvent(HWND hWnd)
 			g_pPhyBox -> ShiftMove(g_Map.GetMapPhysics());
 			g_pPhyBox -> CheckErr(g_Map.GetMapPhysics(), TRUE);
 		}
+		else
+		{
+			g_pPhyBox -> SetVelo(0, 0);
+			g_pPhyBox -> SetAccelerate(g_gravityAcceleration);
+			g_pPhyBox -> SetMoveState(true);
+		}
 
 		if(g_pPhyTest -> GetMoveState())
 		{
-			g_pPhyTest -> ShiftMove(g_Map.GetMapPhysics());
+			std::vector<GamePhysics*> v(g_Map.GetMapPhysics());
+			v.push_back(g_pPhyBox);
+			g_pPhyTest -> ShiftMove(v);
+			// g_pPhyTest -> ShiftMove(g_Map.GetMapPhysics());
 			g_pPhyTest -> CheckErr(g_Map.GetMapPhysics(), TRUE);
+			// g_pPhyTest -> CheckErr(g_pPhyBox, TRUE);
 		}
 		else
 		{
@@ -355,15 +365,36 @@ void KeyEvent(HWND hWnd)
 				g_pPhyTest -> SetVelo(-5, g_pPhyTest -> GetVelo().y);
 				g_pPhyTest -> SetMoveState(true);
 				g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
+				RECT r1;
+				// if(g_pPhyTest -> Collision(g_pPhyBox, BA_STOP, &r1))
+				if(g_pPhyTest -> CheckErr(g_pPhyBox, TRUE))
+				{
+					g_pPhyBox -> SetVelo(-5, 0);
+					g_pPhyBox -> SetMoveState(true);
+				} else {
+					g_pPhyBox -> SetVelo(0, 0);
+				}
 			}
-			if(GetAsyncKeyState(VK_RIGHT)<0)	//判断右方向键是否按下====================
+			else if(GetAsyncKeyState(VK_RIGHT)<0)	//判断右方向键是否按下====================
 			{	
 				g_pPhyTest -> SetVelo(5, g_pPhyTest -> GetVelo().y);
 				g_pPhyTest -> SetMoveState(true);
 				g_pMscMove->Play(300,FALSE,FALSE);	//播放移动音效
+				RECT r1;
+				// if(g_pPhyTest -> Collision(g_pPhyBox, BA_STOP, &r1))
+				if(g_pPhyTest -> CheckErr(g_pPhyBox, TRUE))
+				{
+					g_pPhyBox -> SetVelo(5, 0);
+					g_pPhyBox -> SetMoveState(true);
+				} else {
+					g_pPhyBox -> SetVelo(0, 0);
+				}
+			} else {
+				g_pPhyBox -> SetVelo(0, 0);
 			}
 			
 			if(GetAsyncKeyState(VK_UP)<0)
+			{
 				if( !l_VKUP_pressed)
 				{
 					l_VKUP_pressed = TRUE;
@@ -386,6 +417,7 @@ void KeyEvent(HWND hWnd)
 		{
 			l_VKUP_pressed = FALSE;
 			g_pPhyTest -> SetVelo(0, g_pPhyTest -> GetVelo().y);
+			g_pPhyBox -> SetVelo(0, g_pPhyBox -> GetVelo().y);
 			// g_pPhyTest -> SetAccelerate(g_gravityAcceleration);
 			// g_pPhyTest -> SetMoveState(true);
 		}
