@@ -257,6 +257,10 @@ BOOL PlayScene_3(HWND hWnd)
 	// g_pSprBox2->SetDrawInfo(g_pPhyBox2->GetLeftTop().x,g_pPhyBox2->GetLeftTop().y,TRUE);      //加了一个箱子
 	
 	g_pSprTestAnima1->SetDrawAnimaInfo(g_pPhyTest->GetLeftTop().x,g_pPhyTest->GetLeftTop().y,0,TRUE,RGB(255,255,255));
+	if(GetAsyncKeyState(VK_UP)<0 && g_pPhyTest -> CheckErr(g_Map.GetDestinationPhy(), FALSE))
+	{	
+		MessageBox(g_pGE->GetWindow(),"恭喜你通过此关，点击进入选关页面","游戏胜利",MB_YESNO|MB_DEFBUTTON2 | MB_ICONASTERISK);
+	}
 
 	return TRUE;
 }

@@ -132,6 +132,17 @@ void GameMap::AddMap2SpriteManager(SpriteManage &Sprm) // 将地图物品添加到精灵管
 			pPhysics -> SetCheckBox();
 			AddMapObject(pPhysics);
 		}
+		else if(MapArray[i].id == 3)	// 先只考虑黄色的门
+		{
+			RECT rObject={MapArray[i].x*50, MapArray[i].y*50,
+					MapArray[i].x*50 + MapArray[i].w*nRectWidth[MapArray[i].id],
+					MapArray[i].y*50 + MapArray[i].h*nRectHeight[MapArray[i].id]};
+
+			RECT rBound={0,0,800,600};
+			GamePhysics* pPhysics = new GamePhysics(rObject,rBound);
+			pPhysics -> SetCheckBox();
+			m_gpDestination = pPhysics;
+		}
 	}
 }
 
@@ -160,4 +171,6 @@ void GameMap::Release(BOOL bDelPhysics)
 		m_vPhysicsManager.clear();			//删除容器中的精灵对象指针
 		vector<GamePhysics *>(m_vPhysicsManager).swap(m_vPhysicsManager);	//压缩容器
 	}
+	delete m_gpDestination;
+	m_gpDestination = NULL;
 }

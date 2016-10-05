@@ -54,6 +54,7 @@ class GameMap
 {
 private:
 	vector<GamePhysics*> m_vPhysicsManager;	//vector对象，用来地图物理指针
+	GamePhysics* m_gpDestination;			// 终点的物理指针
 public:
 	//地图数据
 
@@ -66,6 +67,7 @@ public:
 	BOOL AddMapObject(GamePhysics* pPhysics);		//添加物理指针
 	void Release(BOOL bDelPhysics=FALSE);			//释放资源
 	vector<GamePhysics*> GetMapPhysics() {return m_vPhysicsManager;}
+	GamePhysics* GetDestinationPhy() {return m_gpDestination; }
 
 	//地图切换
 	int FGetLineJumpCom(char *pchar,FILE *fp)
